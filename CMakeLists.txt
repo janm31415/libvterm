@@ -1,0 +1,23 @@
+cmake_minimum_required(VERSION 3.10)
+project(LibVTerm)
+
+if (APPLE)
+set(CMAKE_OSX_DEPLOYMENT_TARGET "14.7" CACHE STRING "Minimum macOS deployment version" FORCE)
+endif(APPLE)
+
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/lib")
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/lib")
+set(CMAKE_PDB_OUTPUT_DIRECTORY     "${CMAKE_CURRENT_BINARY_DIR}/bin")
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/bin")
+
+
+file(GLOB VTERM_SRC "${CMAKE_CURRENT_LIST_DIR}/src/*.c")
+file(GLOB VTERM_HDRS "${CMAKE_CURRENT_LIST_DIR}/include/*.h")
+add_library(vterm OBJECT ${VTERM_SRC} ${VTERM_HDRS})
+set_target_properties(vterm PROPERTIES C_STANDARD 99 C_STANDARD_REQUIRED ON)
+target_include_directories(vterm PUBLIC
+    "$<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/include>"
+)
+target_include_directories(vterm PRIVATE
+    "${CMAKE_CURRENT_LIST_DIR}/src"
+)
